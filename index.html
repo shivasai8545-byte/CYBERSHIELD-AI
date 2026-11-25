@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CyberShield AI | Link Safety Scanner</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <main class="container">
+    <header>
+      <div class="brand-mark">CS</div>
+      <div>
+        <p class="eyebrow">CYBERSECURITY ASSISTANT</p>
+        <h1>CyberShield <span>AI</span></h1>
+      </div>
+    </header>
+
+    <section class="hero">
+      <p class="tag">LINK & MESSAGE THREAT CHECK</p>
+      <h2>Think before you click.</h2>
+      <p class="muted">Paste a suspicious SMS, email, or URL. CyberShield checks for common phishing warning signs.</p>
+    </section>
+
+    <section class="scanner">
+      <form method="post">
+        <label for="message">Suspicious message or link</label>
+        <textarea id="message" name="message" rows="5" placeholder="Example: Your account is blocked. Verify now at https://example.com" required>{{ submitted_text }}</textarea>
+        <button type="submit">Scan for threats <span>→</span></button>
+      </form>
+    </section>
+
+    {% if result %}
+      <section class="results">
+        <h2>Scan results</h2>
+        {% for item in result.items %}
+          <article class="result-card">
+            <div class="result-top">
+              <div>
+                <p class="eyebrow">RISK LEVEL</p>
+                <h3 class="risk {{ item.risk|lower }}">{{ item.risk }} Risk</h3>
+              </div>
+              <div class="score">{{ item.score }}<small>/100</small></div>
+            </div>
+            {% if item.host %}<p class="host">Domain: {{ item.host }}</p>{% endif %}
+            <h4>Findings</h4>
+            <ul>
+              {% for reason in item.reasons %}<li>{{ reason }}</li>{% endfor %}
+            </ul>
+          </article>
+        {% endfor %}
+        <p class="disclaimer">This is a basic heuristic demo, not a guarantee that a link is safe or malicious. Do not enter passwords or payment details on suspicious sites.</p>
+      </section>
+    {% endif %}
+
+    <footer>CyberShield AI · Educational prototype · Stay alert online</footer>
+  </main>
+</body>
+</html>
